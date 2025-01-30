@@ -49,16 +49,30 @@ const CooperativeFormModal = ({ isOpen, onClose, mode, currentCooperative, onInp
         e.preventDefault();
         try {
             // Vérifiez que tous les champs obligatoires sont remplis
-            if (!currentCooperative.nom || !currentCooperative.description || !currentCooperative.adresse || !currentCooperative.idProvince || !currentCooperative.idCategorieCoop || !currentCooperative.chiffre_affaires || !contact.nom || !contact.prenom || !contact.telephone || !contact.email || !contact.fonction) {
+            const requiredFields = [
+                currentCooperative.nom,
+                currentCooperative.description,
+                currentCooperative.adresse,
+                currentCooperative.idProvince,
+                currentCooperative.idCategorieCoop,
+                currentCooperative.chiffre_affaires,
+                currentCooperative.membres_actifs, // Ajoutez ce champ
+                contact.nom,
+                contact.prenom,
+                contact.telephone,
+                contact.email,
+                contact.fonction,
+            ];
+            if (requiredFields.some((field) => !field && field !== 0)) { // Permet une valeur de 0 pour membres_actifs
                 alert("Veuillez remplir tous les champs obligatoires.");
                 return;
             }
-    
+
             const dataToSend = {
                 ...currentCooperative,
                 contact: contact,
             };
-    
+
             console.log("Données envoyées :", dataToSend);
             onSubmit(dataToSend);
         } catch (err) {
@@ -185,6 +199,18 @@ const CooperativeFormModal = ({ isOpen, onClose, mode, currentCooperative, onInp
                                 onChange={onInputChange}
                                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 required
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700">Membres Actifs</label>
+                            <input
+                                type="number"
+                                name="membres_actifs"
+                                value={currentCooperative.membres_actifs || 0}
+                                onChange={onInputChange}
+                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                required
+                                min="0" // Pour éviter les valeurs négatives
                             />
                         </div>
                     </div>

@@ -27,7 +27,7 @@ router.post('/', authenticateToken, async (req, res) => {
         const { contact, ...cooperativeData } = req.body;
 
         // Vérifie que tous les champs obligatoires sont présents
-        if (!cooperativeData.nom || !cooperativeData.description || !cooperativeData.adresse || 
+        if (!cooperativeData.nom || !cooperativeData.description || !cooperativeData.adresse || !cooperativeData.chiffre_affaires || !cooperativeData.membres_actifs || 
             !cooperativeData.idProvince || !cooperativeData.idCategorieCoop || !contact) {
             console.log("Champs manquants :", { cooperativeData, contact });
             return res.status(400).json({ message: "Tous les champs obligatoires doivent être remplis." });

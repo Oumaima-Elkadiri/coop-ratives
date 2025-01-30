@@ -18,7 +18,14 @@ function ProductsPage() {
     useEffect(() => {
         const fetchProduits = async () => {
             try {
-                const response = await fetch(`http://localhost:5000/api/produits?cooperative=${id}`);
+                const token = localStorage.getItem('authToken');
+                const response = await fetch(`http://localhost:5000/api/produits?cooperative=${id}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`, // Include the token here
+                        'Content-Type': 'application/json',
+                    },
+                });
                 if (!response.ok) {
                     throw new Error('Failed to fetch produits');
                 }
