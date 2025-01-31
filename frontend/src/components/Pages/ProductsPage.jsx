@@ -15,10 +15,10 @@ function ProductsPage() {
     const [error, setError] = useState(null);
 
     // Récupérer les produits depuis l'API
+    const token = localStorage.getItem('authToken');
     useEffect(() => {
         const fetchProduits = async () => {
             try {
-                const token = localStorage.getItem('authToken');
                 const response = await fetch(`http://localhost:5000/api/produits?cooperative=${id}`, {
                     method: 'GET',
                     headers: {
@@ -78,6 +78,10 @@ function ProductsPage() {
             try {
                 const response = await fetch(`http://localhost:5000/api/produits/${id}`, {
                     method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`, // Include the token
+                        'Content-Type': 'application/json',
+                    },
                 });
 
                 if (!response.ok) {
@@ -99,14 +103,20 @@ function ProductsPage() {
                 // Modifier un produit existant
                 response = await fetch(`http://localhost:5000/api/produits/${currentProduct._id}`, {
                     method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Authorization': `Bearer ${token}`, // Include the token
+                        'Content-Type': 'application/json',
+                    },
                     body: JSON.stringify(produit),
                 });
             } else {
                 // Ajouter un nouveau produit
                 response = await fetch('http://localhost:5000/api/produits', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Authorization': `Bearer ${token}`, // Include the token here
+                        'Content-Type': 'application/json',
+                    },
                     body: JSON.stringify({ ...produit, idCooperative: id }),
                 });
             }
